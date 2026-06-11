@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+
+  <key>Label</key>
+  <string>com.ainews.daily</string>
+
+  <!-- ── Script ─────────────────────────────────────────────────────────── -->
+  <key>ProgramArguments</key>
+  <array>
+    <string>__PYTHON3__</string>
+    <string>__SCRIPT_DIR__/ai_news_agent.py</string>
+  </array>
+
+  <!-- ── Environment ────────────────────────────────────────────────────── -->
+  <!-- No API key needed — the agent uses the Claude Code CLI, which signs
+       in with your Claude subscription (credentials in the macOS Keychain). -->
+  <key>EnvironmentVariables</key>
+  <dict>
+    <!-- Uncomment and fill in if you use email delivery:
+    <key>EMAIL_PASSWORD</key>
+    <string>__EMAIL_PASSWORD__</string>
+    -->
+    <key>PATH</key>
+    <string>/usr/local/bin:/usr/bin:/bin</string>
+  </dict>
+
+  <!-- ── Schedule ───────────────────────────────────────────────────────── -->
+  <!-- Time is substituted from config.yaml by setup_macos.sh              -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>__HOUR__</integer>
+    <key>Minute</key>
+    <integer>__MINUTE__</integer>
+  </dict>
+
+  <!-- ── Logging ────────────────────────────────────────────────────────── -->
+  <key>StandardOutPath</key>
+  <string>__SCRIPT_DIR__/logs/ai_news.log</string>
+  <key>StandardErrorPath</key>
+  <string>__SCRIPT_DIR__/logs/ai_news_err.log</string>
+
+  <!-- Keep logs small: rotate after ~1 MB                                 -->
+  <key>SoftResourceLimits</key>
+  <dict>
+    <key>NumberOfFiles</key>
+    <integer>256</integer>
+  </dict>
+
+</dict>
+</plist>

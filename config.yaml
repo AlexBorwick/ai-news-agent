@@ -1,0 +1,124 @@
+# ─── AI News Agent — Configuration ───────────────────────────────────────────
+# Edit this file; the agent picks it up on every run.
+# Runs via the Claude Code CLI on your Claude subscription — no API key needed.
+
+# Model for the briefing. Haiku is fastest and uses the least of your plan.
+model: claude-haiku-4-5
+
+
+# ── Sources ─────────────────────────────────────────────────────────────────
+# ★ ADD YOUR OWN FAVOURITE SITES HERE ★
+# These are recommended defaults — edit freely. The agent asks Claude to
+# check these first when ranking the day's news.
+sources:
+  # Named publications to check first
+  publications:
+    - "MIT Technology Review"
+    - "Ars Technica AI"
+    - "The Verge"
+    - "TechCrunch"
+    - "VentureBeat AI"
+    - "Wired"
+    # - "Your favourite site here"
+
+  # Substack / newsletter slugs or display names
+  substacks:
+    - "Import AI (Jack Clark)"            # importai.substack.com
+    - "The Gradient Pub"                  # thegradientpub.substack.com
+    - "AI Breakfast"                      # aibreakfast.substack.com
+    - "Stratechery (Ben Thompson)"
+    - "The Algorithmic Bridge (Alberto Romero)"
+    # - "Your favourite substack here"
+
+  # Other newsletters (matched by name in search)
+  newsletters:
+    - "The Batch by deeplearning.ai"
+    - "TLDR AI"
+    - "Eye on AI"
+    # - "Your favourite newsletter here"
+
+
+# ── Topic priorities ─────────────────────────────────────────────────────────
+# Claude will weight these when ranking the 3 key items and reading list.
+topics:
+  - model releases and benchmarks
+  - research breakthroughs
+  - AI safety and alignment
+  - open-source releases
+  - regulation and policy
+  - company / funding news
+
+
+# ── Your saved items (all optional) ──────────────────────────────────────────
+# The agent can read what you've already saved so the briefing is tailored
+# to your interests and never recommends things you already have.
+saved_items:
+  # A reading-list CSV (path relative to this folder). Leave empty to skip.
+  # Needs at least these columns: Title, Link, Status (rows with
+  # Status=Unread are included). See readings.example.csv for the format.
+  reading_list_csv: ""
+  max_unread: 20              # max unread reading-list items to include
+
+  # Chrome: only bookmarks saved in the last week
+  chrome_bookmarks: true
+  chrome_max_age_days: 7      # ignore Chrome bookmarks older than this
+  chrome_max_bookmarks: 15    # cap, in case of a big bookmarking spree
+
+  # Safari: Reading List (newest first) + most recently added bookmarks.
+  # Note: Safari doesn't store dates on ordinary bookmarks, so "recent"
+  # means the last ones added, not a strict time window.
+  # Needs Full Disk Access (System Settings → Privacy & Security →
+  # Full Disk Access → add Terminal). Skipped gracefully if not granted.
+  safari_bookmarks: true
+  safari_reading_list_max: 20 # newest Reading List items to include
+  safari_recent_bookmarks: 10 # most recently added bookmarks to include
+
+  # Only send AI-related bookmarks/Reading List items to Claude (keeps
+  # personal browsing out of the prompt). The reading-list CSV is always
+  # included in full.
+  # Set to false to send everything, or add your own ai_keywords list.
+  ai_filter: true
+
+
+# ── Delivery ─────────────────────────────────────────────────────────────────
+# Comment out sections you don't want. At least one must be active.
+delivery:
+  # Print to stdout (always on — useful for logs)
+  stdout: true
+
+  # Save a dated .md file next to this config
+  save_file: true
+
+  # ── Claude.ai chat ────────────────────────────────────────────────────────
+  # Opens a Claude.ai conversation with the briefing pre-loaded so you can
+  # ask follow-up questions straight away.
+  claude_chat:
+    enabled: false
+    # Text prepended to the briefing in the chat prompt
+    prompt_prefix: "Here is today's AI news briefing. Feel free to ask me follow-up questions:\n\n"
+
+  # ── Webpage ────────────────────────────────────────────────────────────────
+  # Renders a clean HTML page and opens it in your default browser.
+  webpage:
+    enabled: true
+    auto_open: true           # set false to save without opening
+
+  # ── Email ──────────────────────────────────────────────────────────────────
+  # Password is read from the EMAIL_PASSWORD env var (not stored here).
+  # For Gmail: create an App Password at myaccount.google.com/apppasswords
+  email:
+    enabled: false
+    smtp_host: "smtp.gmail.com"
+    smtp_port: 587
+    from_addr: ""             # e.g. you@gmail.com
+    subject: "AI News — {date}"
+    to_addrs:
+      - ""                    # add recipient addresses here
+
+
+# ── Schedule ─────────────────────────────────────────────────────────────────
+# Used by setup_macos.sh to write the launchd plist.
+# After changing, re-run: bash setup_macos.sh
+schedule:
+  hour: 8
+  minute: 0
